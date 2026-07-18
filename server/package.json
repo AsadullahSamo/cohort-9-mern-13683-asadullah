@@ -1,0 +1,13 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Express/Prisma backend for the Notes App — auth, notes CRUD, logging, and exception handling.",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --watch index.js"
+  },
+  "author": "Asadullah Samoon",
+  "license": "ISC",
+  "type": "commonjs"
+}
