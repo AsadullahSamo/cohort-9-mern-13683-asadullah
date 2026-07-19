@@ -2,15 +2,20 @@ require("dotenv").config();
 const mongoose = require("mongoose")
 const express = require("express");
 const pinoHttp = require("pino-http")
+const cookieParser = require("cookie-parser")
 
 const connectDB = require("./db")
 const logger = require("./logger")
 const errorHandler = require("./middleware/errorHandler")
 
+const authRoutes = require("./routes/auth")
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(pinoHttp({ logger }))
+app.use(express.json())
+app.use(cookieParser())
 
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
@@ -25,6 +30,7 @@ app.get("/api/health/db", async (req, res) => {
   }
 });
 
+app.use("/api/auth", authRoutes);
 app.use(errorHandler)
 
 connectDB()
