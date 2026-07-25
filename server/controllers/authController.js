@@ -64,9 +64,18 @@ async function logout(req, res) {
   const token = req.cookies.refreshToken;
 
   if (token) {
-    const payload = jwt.decode(token);
-    if (payload.sub) {
-      await User.findByIdAndUpdate(payload.sub, { refreshToken: null });
+    try {
+      const payload = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+      const user = await User.findById(payload.sub).select("+refreshToken");
+
+      if (user?.refreshToken && await bcrypt.compare(token, user.refreshToken)) {
+        await User.updateOne(
+          { _id: user._id, refreshToken: user.refreshToken },
+          { $set: { refreshToken: null } },
+        );
+      }
+    } catch {
+      // Clear the client cookie without revoking any server-side session.
     }
   }
 
