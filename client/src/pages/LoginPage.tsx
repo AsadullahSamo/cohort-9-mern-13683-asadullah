@@ -20,7 +20,7 @@ export function LoginPage() {
       if (axios.isAxiosError(err) && err.response?.data?.error) {
         setError(err.response.data.error);
       } else {
-        setError("Signup failed");
+        setError("Login failed");
       }
     }
   }

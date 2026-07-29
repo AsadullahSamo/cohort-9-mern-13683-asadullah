@@ -40,6 +40,6 @@ connectDB()
     });
   })
   .catch((err) => {
-    logger.error("Failed to connect to MongoDB", err.message)
+    logger.error({ err }, "Failed to connect to MongoDB")
     process.exit(1)
   })
