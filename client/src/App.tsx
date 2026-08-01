@@ -7,7 +7,19 @@ import { LoginPage } from "./pages/LoginPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { NoteEditorPage } from "./pages/NoteEditorPage";
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: (failureCount, error: any) => {
+        if (error?.response?.status === 401) {
+          return false;
+        }
+
+        return failureCount < 3;
+      },
+    },
+  },
+});
 
 function App() {
   return (
