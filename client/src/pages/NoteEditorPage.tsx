@@ -16,6 +16,8 @@ export function NoteEditorPage() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
+  const [saveError, setSaveError] = useState<string | null>(null);
+
   useEffect(() => {
     if (existingNote) {
       setTitle(existingNote.title);
@@ -24,12 +26,22 @@ export function NoteEditorPage() {
   }, [existingNote]);
 
   async function handleSave() {
-    if (isNew) {
-      await createNote.mutateAsync({ title, content });
-    } else {
-      await updateNote.mutateAsync({ id: id as string, updates: { title, content } });
+    setSaveError(null);
+
+    try {
+      if (isNew) {
+        await createNote.mutateAsync({ title, content });
+      } else {
+        await updateNote.mutateAsync({
+          id: id as string,
+          updates: { title, content },
+        });
+      }
+
+      navigate("/");
+    } catch {
+      setSaveError("Couldn't save note. Please try again.");
     }
-    navigate("/");
   }
 
   if (!isNew && isLoading) {
@@ -54,6 +66,13 @@ export function NoteEditorPage() {
         className="w-full text-xl font-semibold border-b pb-2 mb-4 focus:outline-none"
       />
       <NoteEditor content={content} onChange={setContent} />
+
+      {saveError && (
+        <p className="text-sm text-red-600">
+          {saveError}
+        </p>
+      )}
+
       <div className="flex gap-2 mt-4">
         <button
           onClick={handleSave}
