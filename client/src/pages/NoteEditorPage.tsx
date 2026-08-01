@@ -12,6 +12,7 @@ export function NoteEditorPage() {
   const createNote = useCreateNote();
   const updateNote = useUpdateNote();
 
+  const isPending = createNote.isPending || updateNote.isPending;
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
@@ -56,13 +57,15 @@ export function NoteEditorPage() {
       <div className="flex gap-2 mt-4">
         <button
           onClick={handleSave}
-          className="bg-blue-600 text-white rounded px-4 py-2 cursor-pointer hover:bg-blue-700"
+          disabled={isPending}
+          className="bg-blue-600 text-white rounded px-4 py-2 cursor-pointer hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Save
+          {isPending ? "Saving..." : "Save"}
         </button>
         <button
           onClick={() => navigate("/")}
-          className="bg-gray-200 rounded px-4 py-2 cursor-pointer hover:bg-gray-300"
+          disabled={isPending}
+          className="bg-gray-200 rounded px-4 py-2 cursor-pointer hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Cancel
         </button>
