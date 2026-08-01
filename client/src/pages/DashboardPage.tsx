@@ -24,9 +24,8 @@ export function DashboardPage() {
   }
 
   function stripHtml(html: string) {
-    const el = document.createElement("div");
-    el.innerHTML = html;
-    return el.textContent || "";
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent || "";
   }
 
   return (
