@@ -10,6 +10,7 @@ export function DashboardPage() {
   const deleteNote = useDeleteNote();
 
   const [logoutError, setLogoutError] = useState<string | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
   async function handleLogout() {
@@ -72,6 +73,12 @@ export function DashboardPage() {
         </p>
       )}
 
+      {deleteError && (
+        <p className="text-sm text-red-600 mb-4">
+          {deleteError}
+        </p>
+      )}
+
       <ul className="space-y-2">
         {notes?.map((note) => (
           <li
@@ -86,13 +93,17 @@ export function DashboardPage() {
             </Link>
 
             <button
-              onClick={() => setPendingDeleteId(note._id)}
+              onClick={() => {
+                setDeleteError(null);
+                setPendingDeleteId(note._id);
+              }}
               className="text-red-600 text-sm ml-4 cursor-pointer hover:text-red-800"
             >
               Delete
             </button>
           </li>
         ))}
+
       </ul>
 
       <ConfirmDialog
@@ -100,9 +111,15 @@ export function DashboardPage() {
         message="Delete this note? This cannot be undone."
         onConfirm={() => {
           if (pendingDeleteId) {
-            deleteNote.mutate(pendingDeleteId);
+            deleteNote.mutate(pendingDeleteId, {
+              onSuccess: () => {
+                setPendingDeleteId(null);
+              },
+              onError: () => {
+                setDeleteError("Couldn't delete note. Please try again.");
+              },
+            });
           }
-          setPendingDeleteId(null);
         }}
         onCancel={() => setPendingDeleteId(null)}
       />
