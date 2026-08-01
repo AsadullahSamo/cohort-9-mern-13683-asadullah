@@ -50,7 +50,7 @@ export function NoteEditorPage() {
 
   if (isError) {
     return (
-      <p className="text-red-600">
+      <p role="alert" className="text-sm text-red-600">
         Failed to load note.
       </p>
     );

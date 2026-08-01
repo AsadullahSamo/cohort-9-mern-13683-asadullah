@@ -30,6 +30,7 @@ export function ConfirmDialog({ open, message, onConfirm, onCancel }: ConfirmDia
       className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
       role="dialog"
       aria-modal="true"
+      aria-label="Confirm deletion"
     >
       <div className="bg-white rounded-lg shadow-lg p-6 w-80">
         <p className="mb-4">{message}</p>
