@@ -8,7 +8,7 @@ export function NoteEditorPage() {
   const isNew = id === undefined;
   const navigate = useNavigate();
 
-  const { data: existingNote, isLoading } = useNote(isNew ? undefined : id);
+  const { data: existingNote, isLoading, isError } = useNote(isNew ? undefined : id);
   const createNote = useCreateNote();
   const updateNote = useUpdateNote();
 
@@ -33,6 +33,14 @@ export function NoteEditorPage() {
 
   if (!isNew && isLoading) {
     return <div className="p-8">Loading...</div>;
+  }
+
+  if (isError) {
+    return (
+      <p className="text-red-600">
+        Failed to load note.
+      </p>
+    );
   }
 
   return (
