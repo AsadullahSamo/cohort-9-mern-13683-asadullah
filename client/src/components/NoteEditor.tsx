@@ -7,24 +7,7 @@ interface NoteEditorProps {
   onChange: (html: string) => void;
 }
 
-export function NoteEditor({ content, onChange }: NoteEditorProps) {
-  const editor = useEditor({
-    extensions: [StarterKit],
-    content,
-    onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
-    },
-  });
-
-  useEffect(() => {
-    if (editor && content !== editor.getHTML()) {
-      editor.commands.setContent(content);
-    }
-  }, [content, editor]);
-
-  if (!editor) return null;
-
-  function ToolbarButton({
+function ToolbarButton({
     onClick,
     isActive,
     label,
@@ -44,7 +27,25 @@ export function NoteEditor({ content, onChange }: NoteEditorProps) {
         {label}
       </button>
     );
-  }
+}
+
+export function NoteEditor({ content, onChange }: NoteEditorProps) {
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content,
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+  });
+
+  useEffect(() => {
+    if (editor && content !== editor.getHTML()) {
+      editor.commands.setContent(content);
+    }
+  }, [content, editor]);
+
+  if (!editor) return null;
+
 
   return (
     <div className="border rounded">
