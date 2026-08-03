@@ -9,6 +9,7 @@ const logger = require("./logger")
 const errorHandler = require("./middleware/errorHandler")
 
 const authRoutes = require("./routes/auth")
+const notesRoutes = require("./routes/notes")
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -31,6 +32,7 @@ app.get("/api/health/db", async (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/notes", notesRoutes);
 app.use(errorHandler)
 
 connectDB()
