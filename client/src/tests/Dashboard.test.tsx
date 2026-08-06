@@ -14,6 +14,18 @@ describe("DashboardPage", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    (useNotesHooks.useNotes as jest.Mock).mockReturnValue({
+      data: [{
+        _id: "1",
+        title: "My note",
+        content: "content",
+        user: "u1",
+        createdAt: "",
+        updatedAt: "",
+      }],
+      isLoading: false,
+      isError: false,
+    });
     (AuthContext.useAuth as jest.Mock).mockReturnValue({
       logout: mockLogout,
       login: jest.fn(),

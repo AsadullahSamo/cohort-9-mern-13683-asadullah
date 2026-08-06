@@ -3,6 +3,6 @@
   "compilerOptions": {
     "verbatimModuleSyntax": false,
     "module": "CommonJS",
-    "types": ["node", "jest", "@testing-library/jest-dom"]
+    "types": ["node", "vite/client", "jest", "@testing-library/jest-dom"]
   }
 }

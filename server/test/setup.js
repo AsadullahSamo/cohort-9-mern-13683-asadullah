@@ -21,7 +21,12 @@ exports.mochaHooks = {
   },
 
   async afterAll() {
-    await mongoose.disconnect();
-    await mongoServer.stop();
+    try {
+      await mongoose.disconnect();
+    } finally {
+      if (mongoServer) {
+        await mongoServer.stop();
+      }
+    }
   },
 };
