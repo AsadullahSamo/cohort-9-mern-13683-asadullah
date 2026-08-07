@@ -32,7 +32,7 @@ export function ConfirmDialog({ open, message, onConfirm, onCancel }: ConfirmDia
       aria-modal="true"
       aria-label="Confirm deletion"
     >
-      <div className="bg-white rounded-lg shadow-lg p-6 w-80">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-100">
         <p className="mb-4">{message}</p>
         <div className="flex justify-end gap-2">
           <button
