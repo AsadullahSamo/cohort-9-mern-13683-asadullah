@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const express = require("express");
 const pinoHttp = require("pino-http");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
+
 
 const logger = require("./logger");
 const errorHandler = require("./middleware/errorHandler");
@@ -10,6 +12,13 @@ const authRoutes = require("./routes/auth");
 const notesRoutes = require("./routes/notes");
 
 const app = express();
+
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  })
+);
 
 app.use(pinoHttp({ logger }));
 app.use(express.json());
