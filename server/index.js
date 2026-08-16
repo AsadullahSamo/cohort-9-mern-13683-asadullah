@@ -1,4 +1,9 @@
 require("dotenv").config();
+
+if (!process.env.CLIENT_URL) {
+  throw new Error("CLIENT_URL must be configured");
+}
+
 const app = require("./app");
 const connectDB = require("./db");
 const logger = require("./logger");
