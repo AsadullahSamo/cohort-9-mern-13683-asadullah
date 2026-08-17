@@ -1,8 +1,10 @@
 import axios from "axios";
 import { getToken, setToken, notifyTokenRefreshed } from "../context/tokenStore";
 
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "/api").replace(/\/+$/, "")
+
 export const api = axios.create({
-  baseURL: "/api",
+  baseURL: API_BASE_URL,
   withCredentials: true,
 });
 
@@ -30,7 +32,7 @@ api.interceptors.response.use(
     try {
       if (!refreshPromise) {
         refreshPromise = axios
-          .post("/api/auth/refresh", null, { withCredentials: true })
+          .post(`${API_BASE_URL}/auth/refresh`, null, { withCredentials: true })
           .then((res) => res.data.accessToken)
           .finally(() => {
             refreshPromise = null;
