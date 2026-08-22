@@ -1,16 +1,19 @@
 const Note = require("../models/Note")
 
 const getNotes = async (req, res) => {
-    const search = req.query.search;
+    const search = typeof req.query.search === "string"
+        ? req.query.search.trim().slice(0, 100)
+        : "";
 
     let query = { user: req.userId };
 
     if (search) {
-        const regex = new RegExp(search, "i");
+        const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const regex = new RegExp(escapedSearch, "i");
 
         query = {
             user: req.userId,
-            $or: [ { title: regex }, { content: regex } ]
+            $or: [{ title: regex }, { content: regex }],
         };
     }
 

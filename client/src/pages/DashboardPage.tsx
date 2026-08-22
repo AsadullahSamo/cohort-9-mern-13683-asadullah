@@ -1,9 +1,29 @@
+import DOMPurify from "dompurify";
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useNotes, useDeleteNote, useCreateNote } from "../hooks/useNotes";
 import { getNotes as fetchAllNotes } from "../api/notes";
 import { ConfirmDialog } from "../components/ConfirmDialog";
+
+
+type ImportedNote = {
+  title: string;
+  content: string;
+};
+
+function isImportedNote(value: unknown): value is ImportedNote {
+  if (typeof value !== "object" || value === null) return false;
+
+  const note = value as Record<string, unknown>;
+
+  return (
+    typeof note.title === "string" &&
+    note.title.length > 0 &&
+    typeof note.content === "string" &&
+    note.content.length > 0
+  );
+}
 
 export function DashboardPage() {
   const { logout } = useAuth();
@@ -22,24 +42,34 @@ export function DashboardPage() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [importSummary, setImportSummary] = useState<string | null>(null);
+  const [exportError, setExportError] = useState<string | null>(null);
 
   async function handleExport() {
-    const allNotes = await fetchAllNotes();
-    const exportData = allNotes.map(({ title, content }) => ({ title, content }));
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "notes-export.json";
-    a.click();
-    URL.revokeObjectURL(url);
+    setExportError(null);
+
+    try {
+      const allNotes = await fetchAllNotes();
+      const exportData = allNotes.map(({ title, content }) => ({ title, content }));
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "notes-export.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      setExportError("Couldn't export notes. Please try again.");
+    }
   }
 
   async function handleImportFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    let parsed;
+    let parsed: unknown;
+
     try {
       parsed = JSON.parse(await file.text());
     } catch {
@@ -56,13 +86,16 @@ export function DashboardPage() {
     let skipped = 0;
 
     for (const item of parsed) {
-      if (!item?.title || !item?.content || typeof item.title !== "string" || typeof item.content !== "string") {
+      if (!isImportedNote(item)) {
         skipped++;
         continue;
       }
 
       try {
-        await createNote.mutateAsync({ title: item.title, content: item.content });
+        await createNote.mutateAsync({
+          title: item.title,
+          content: item.content,
+        });
         imported++;
       } catch {
         skipped++;
@@ -152,6 +185,12 @@ export function DashboardPage() {
         </div>
       )}
 
+      {exportError && (
+        <p className="text-sm text-red-600 mb-4">
+          {exportError}
+        </p>
+      )}
+
       {isLoading && <p>Loading...</p>}
       {isError && <p className="text-red-600">Failed to load notes.</p>}
 
@@ -183,7 +222,9 @@ export function DashboardPage() {
               <h2 className="font-medium truncate">{note.title}</h2>
               <div
                 className="prose prose-sm max-w-none text-gray-500 line-clamp-2 [&_*]:my-0"
-                dangerouslySetInnerHTML={{ __html: note.content }}
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(note.content),
+                }}
               />
             </Link>
 
