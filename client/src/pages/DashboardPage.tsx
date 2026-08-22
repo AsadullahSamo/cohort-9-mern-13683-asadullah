@@ -76,21 +76,6 @@ export function DashboardPage() {
   const [logoutError, setLogoutError] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
-  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
-
-  const PREVIEW_LIMIT = 150;
-
-  function toggleExpanded(id: string) {
-    setExpandedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
-  }
 
   async function handleLogout() {
     setLogoutError(null);
@@ -102,13 +87,6 @@ export function DashboardPage() {
     }
   }
 
-  function stripHtml(html: string) {
-    const doc = new DOMParser().parseFromString(html, "text/html");
-    doc.querySelectorAll("h1, h2, h3, p, li").forEach((el) => {
-      el.append(" ");
-    });
-    return (doc.body.textContent || "").replace(/\s+/g, " ").trim();
-  }
 
   return (
     <div className="p-8 max-w-2xl mx-auto">
@@ -201,36 +179,13 @@ export function DashboardPage() {
             key={note._id}
             className="border rounded p-4 flex justify-between items-start"
           >
-                        <div className="flex-1 min-w-0">
-              <Link to={`/notes/${note._id}`}>
-                <h2 className="font-medium truncate">{note.title}</h2>
-              </Link>
-              {(() => {
-                const plainText = stripHtml(note.content);
-                const isExpanded = expandedIds.has(note._id);
-                const isLong = plainText.length > PREVIEW_LIMIT;
-                const displayText = isExpanded || !isLong
-                  ? plainText
-                  : plainText.slice(0, PREVIEW_LIMIT) + "...";
-
-                return (
-                  <>
-                    <p className="text-gray-500 text-sm break-words">
-                      {displayText}
-                    </p>
-                    {isLong && (
-                      <button
-                        type="button"
-                        onClick={() => toggleExpanded(note._id)}
-                        className="text-blue-600 text-xs mt-1 cursor-pointer hover:underline"
-                      >
-                        {isExpanded ? "Show less" : "Show more"}
-                      </button>
-                    )}
-                  </>
-                );
-              })()}
-            </div>
+            <Link to={`/notes/${note._id}`} className="flex-1 min-w-0">
+              <h2 className="font-medium truncate">{note.title}</h2>
+              <div
+                className="prose prose-sm max-w-none text-gray-500 line-clamp-2 [&_*]:my-0"
+                dangerouslySetInnerHTML={{ __html: note.content }}
+              />
+            </Link>
 
             <button
               onClick={() => {
