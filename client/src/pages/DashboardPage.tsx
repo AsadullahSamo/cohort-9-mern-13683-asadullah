@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useNotes, useDeleteNote } from "../hooks/useNotes";
@@ -6,7 +6,16 @@ import { ConfirmDialog } from "../components/ConfirmDialog";
 
 export function DashboardPage() {
   const { logout } = useAuth();
-  const { data: notes, isLoading, isError } = useNotes();
+
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(timeout);
+  }, [search]);
+
+  const { data: notes, isLoading, isError } = useNotes(debouncedSearch);
   const deleteNote = useDeleteNote();
 
   const [logoutError, setLogoutError] = useState<string | null>(null);
@@ -50,6 +59,14 @@ export function DashboardPage() {
         </div>
       </div>
 
+      <input
+        type="text"
+        placeholder="Search notes..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="w-full border rounded px-3 py-2 mb-4"
+      />
+
       {logoutError && (
         <div className="flex items-center gap-2 text-sm text-red-600 mb-4">
           <span>{logoutError}</span>
@@ -68,7 +85,7 @@ export function DashboardPage() {
 
       {notes && notes.length === 0 && (
         <p className="text-gray-500">
-          No notes yet. Create your first note.
+          {debouncedSearch ? "No notes match your search." : "No notes yet. Create your first note."}
         </p>
       )}
 

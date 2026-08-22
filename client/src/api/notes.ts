@@ -10,8 +10,8 @@ export interface Note {
 }
 
 
-export async function getNotes(): Promise<Note[]> {
-    const res = await api.get("/notes")
+export async function getNotes(search?: string): Promise<Note[]> {
+    const res = await api.get("/notes", {params: search ? {search} : undefined})
     return res.data
 }
 

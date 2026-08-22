@@ -1,9 +1,22 @@
 const Note = require("../models/Note")
 
 const getNotes = async (req, res) => {
-    const notes = await Note.find({user: req.userId}).sort({updatedAt: -1});
+    const search = req.query.search;
+
+    let query = { user: req.userId };
+
+    if (search) {
+        const regex = new RegExp(search, "i");
+
+        query = {
+            user: req.userId,
+            $or: [ { title: regex }, { content: regex } ]
+        };
+    }
+
+    const notes = await Note.find(query).sort({ updatedAt: -1 });
     res.json(notes);
-}
+};
 
 const getNoteById = async (req, res) => {
     const note = await Note.findOne({_id: req.params.id, user: req.userId});
