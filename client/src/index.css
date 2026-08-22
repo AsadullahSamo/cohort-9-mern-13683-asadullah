@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 .ProseMirror {
   outline: none;
@@ -7,4 +8,28 @@
 
 .ProseMirror p {
   margin: 0.5em 0;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+  margin: 0.25em 0;
+}
+
+.ProseMirror li p {
+  margin: 0;
+}
+
+.ProseMirror li {
+  margin: 0.1em 0;
+}
+
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3 {
+  margin-top: 0.5em;
+  margin-bottom: 0.25em;
+}
+
+.ProseMirror :first-child {
+  margin-top: 0;
 }
