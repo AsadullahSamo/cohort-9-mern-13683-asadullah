@@ -17,11 +17,10 @@ export function LoginPage() {
       await login(email, password);
       navigate("/");
     } catch (err) {
-      if (axios.isAxiosError(err) && err.response?.data?.error) {
-        setError(err.response.data.error);
-      } else {
-        setError("Login failed");
-      }
+      const message = axios.isAxiosError(err) && typeof err.response?.data?.error === "string"
+        ? err.response.data.error
+        : "Login failed";
+      setError(message);
     }
   }
 

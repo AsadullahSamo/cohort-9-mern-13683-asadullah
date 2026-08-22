@@ -17,11 +17,10 @@ export function SignupPage() {
       await signup(email, password);
       navigate("/");
     } catch (err) {
-      if (axios.isAxiosError(err) && err.response?.data?.error) {
-        setError(err.response.data.error);
-      } else {
-        setError("Signup failed");
-      }
+      const message = axios.isAxiosError(err) && typeof err.response?.data?.error === "string"
+        ? err.response.data.error
+        : "Signup failed";
+      setError(message);
     }
   }
 
