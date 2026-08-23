@@ -45,49 +45,72 @@ export function NoteEditorPage() {
   }
 
   if (!isNew && isLoading) {
-    return <div className="p-8">Loading...</div>;
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: "#F7F7FB", fontFamily: "'Inter', sans-serif", color: "#6B6F86" }}
+      >
+        Loading...
+      </div>
+    );
   }
 
   if (isError) {
     return (
-      <p role="alert" className="text-sm text-red-600">
-        Failed to load note.
-      </p>
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: "#F7F7FB", fontFamily: "'Inter', sans-serif" }}
+      >
+        <p role="alert" className="text-sm text-red-600">
+          Failed to load note.
+        </p>
+      </div>
     );
   }
 
   return (
-    <div className="p-8 max-w-2xl mx-auto">
-      <input
-        type="text"
-        placeholder="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="w-full text-xl font-semibold border-b pb-2 mb-4 focus:outline-none"
-      />
-      <NoteEditor content={content} onChange={setContent} />
+    <div className="min-h-screen" style={{ backgroundColor: "#F7F7FB", fontFamily: "'Inter', sans-serif" }}>
+      <div className="max-w-3xl mx-auto px-6 py-10">
+        <input
+          type="text"
+          placeholder="Untitled"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="w-full text-3xl pb-3 mb-5 focus:outline-none bg-transparent"
+          style={{
+            fontFamily: "'Fraunces', serif",
+            fontWeight: 500,
+            color: "#1B1F3B",
+            borderBottom: "1px solid #E4E4EE",
+          }}
+        />
 
-      {saveError && (
-        <p className="text-sm text-red-600">
-          {saveError}
-        </p>
-      )}
+        <NoteEditor content={content} onChange={setContent} />
 
-      <div className="flex gap-2 mt-4">
-        <button
-          onClick={handleSave}
-          disabled={isPending}
-          className="bg-blue-600 text-white rounded px-4 py-2 cursor-pointer hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isPending ? "Saving..." : "Save"}
-        </button>
-        <button
-          onClick={() => navigate("/")}
-          disabled={isPending}
-          className="bg-gray-200 rounded px-4 py-2 cursor-pointer hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Cancel
-        </button>
+        {saveError && (
+          <p className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2 mt-4">
+            {saveError}
+          </p>
+        )}
+
+        <div className="flex gap-2 mt-5">
+          <button
+            onClick={handleSave}
+            disabled={isPending}
+            className="rounded-lg px-4 py-2 text-sm font-medium text-white cursor-pointer transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ backgroundColor: "#1B1F3B" }}
+          >
+            {isPending ? "Saving..." : "Save"}
+          </button>
+          <button
+            onClick={() => navigate("/")}
+            disabled={isPending}
+            className="rounded-lg px-4 py-2 text-sm font-medium cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ border: "1px solid #E4E4EE", color: "#6B6F86" }}
+          >
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
   );
