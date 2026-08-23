@@ -1,6 +1,6 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface NoteEditorProps {
   content: string;
@@ -35,11 +35,19 @@ function ToolbarButton({
 }
 
 export function NoteEditor({ content, onChange }: NoteEditorProps) {
+  const [, forceUpdate] = useState(0);
+
   const editor = useEditor({
     extensions: [StarterKit],
     content,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
+    },
+    onSelectionUpdate: () => {
+      forceUpdate((n) => n + 1);
+    },
+    onTransaction: () => {
+      forceUpdate((n) => n + 1);
     },
   });
 
