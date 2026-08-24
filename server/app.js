@@ -41,4 +41,16 @@ app.use("/api/auth", authRoutes);
 app.use("/api/notes", notesRoutes);
 app.use(errorHandler);
 
+app.use((err, req, res, next) => {
+  // Handle Mongoose CastError
+  if (err.name === 'CastError') {
+    return res.status(400).json({ error: 'Invalid ID format' });
+  }
+  
+  // Handle other errors
+  res.status(err.status || 500).json({ 
+    error: err.message || 'Internal server error' 
+  });
+});
+
 module.exports = app;
