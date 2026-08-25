@@ -79,7 +79,7 @@ describe("DashboardPage", () => {
     expect(screen.getByText("No notes yet. Create your first note.")).toBeInTheDocument();
   });
 
-  it("renders notes with plain-text content snippets", () => {
+  it("renders notes with formatted HTML content preserved", () => {
     (useNotesHooks.useNotes as jest.Mock).mockReturnValue({
       data: [
         {
@@ -96,8 +96,12 @@ describe("DashboardPage", () => {
     });
     renderPage();
 
-    expect(screen.getByText("My note")).toBeInTheDocument();
-    expect(screen.getByText("Some bold text")).toBeInTheDocument();
+    const noteTitle = screen.getByText("My note");
+    expect(noteTitle).toBeInTheDocument();
+
+    const noteItem = noteTitle.closest("li");
+    expect(noteItem).toHaveTextContent("Some bold text");
+    expect(noteItem?.querySelector("strong")).toHaveTextContent("bold");
   });
 
   it("asks for confirmation before deleting, then deletes on confirm", async () => {
