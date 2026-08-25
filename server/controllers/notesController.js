@@ -1,4 +1,5 @@
 const Note = require("../models/Note")
+const { emitToUser } = require("../socket");
 
 const getNotes = async (req, res) => {
     const search = typeof req.query.search === "string"
@@ -39,6 +40,7 @@ const createNote = async (req, res) => {
     }
 
     const note = await Note.create({title, content, user: req.userId});
+    emitToUser(req.userId, "note:created", note);
     res.status(201).json(note);
 }
 
@@ -63,6 +65,7 @@ async function updateNote(req, res) {
     return res.status(404).json({ error: "Note not found" });
   }
 
+  emitToUser(req.userId, "note:updated", note);
   res.json(note);
 }
 
@@ -74,6 +77,7 @@ const deleteNote = async (req, res) => {
         return res.status(404).json({error: "Note not found"});
     }
 
+    emitToUser(req.userId, "note:deleted", { _id: note._id });
     res.json({message: "Note deleted"});
 }
 
