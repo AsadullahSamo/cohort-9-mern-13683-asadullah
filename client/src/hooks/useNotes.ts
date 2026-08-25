@@ -1,14 +1,15 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { getNotes, getNoteById, createNote, updateNote, deleteNote } from "../api/notes";
 
 
 const NOTES_KEY = ["notes"];
 
 
-export function useNotes() {
+export function useNotes(search?: string) {
     return useQuery({
-        queryKey: NOTES_KEY,
-        queryFn: getNotes
+        queryKey: [...NOTES_KEY, search ?? ""],
+        queryFn: () => getNotes(search),
+        placeholderData: keepPreviousData
     })
 }
 

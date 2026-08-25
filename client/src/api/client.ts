@@ -1,7 +1,6 @@
 import axios from "axios";
 import { getToken, setToken, notifyTokenRefreshed } from "../context/tokenStore";
-
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "/api").replace(/\/+$/, "")
+import { API_BASE_URL } from "./apiConfig";
 
 export const api = axios.create({
   baseURL: API_BASE_URL,

@@ -41,4 +41,5 @@ app.use("/api/auth", authRoutes);
 app.use("/api/notes", notesRoutes);
 app.use(errorHandler);
 
+
 module.exports = app;

@@ -37,6 +37,7 @@ jobs:
           npm run test:coverage
 
       - name: SonarCloud Scan
+        if: github.event_name == 'push'
         uses: SonarSource/sonarqube-scan-action@v5.3.1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

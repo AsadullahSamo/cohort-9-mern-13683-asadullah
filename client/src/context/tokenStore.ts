@@ -1,8 +1,15 @@
+import { connectSocket, disconnectSocket } from "../../socket";
+
 let currentToken: string | null = null;
 let onTokenRefreshed: ((token: string | null) => void) | null = null;
 
 export function setToken(token: string | null) {
   currentToken = token;
+  if (token) {
+    connectSocket(token);
+  } else {
+    disconnectSocket();
+  }
 }
 
 export function getToken() {
