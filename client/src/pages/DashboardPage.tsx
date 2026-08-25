@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useNotes, useDeleteNote, useCreateNote } from "../hooks/useNotes";
+import { useNoteSync } from "../hooks/useNoteSync";
 import { getNotes as fetchAllNotes } from "../api/notes";
 import { ConfirmDialog } from "../components/ConfirmDialog";
 
@@ -36,6 +37,7 @@ export function DashboardPage() {
     return () => clearTimeout(timeout);
   }, [search]);
 
+  useNoteSync();
   const { data: notes, isLoading, isError } = useNotes(debouncedSearch);
   const deleteNote = useDeleteNote();
   const createNote = useCreateNote();
