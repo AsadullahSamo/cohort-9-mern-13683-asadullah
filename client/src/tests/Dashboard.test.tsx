@@ -82,7 +82,8 @@ describe("DashboardPage", () => {
     });
     renderPage();
 
-    expect(screen.getByText("No notes yet. Create your first note.")).toBeInTheDocument();
+    expect(screen.getByText("A blank page")).toBeInTheDocument();
+    expect(screen.getByText("Create your first note to get started.")).toBeInTheDocument();
   });
 
   it("renders notes with formatted HTML content preserved", () => {
