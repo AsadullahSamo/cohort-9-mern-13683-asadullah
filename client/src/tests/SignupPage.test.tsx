@@ -32,8 +32,8 @@ describe("SignupPage", () => {
     mockSignup.mockResolvedValue(undefined);
     renderPage();
 
-    await userEvent.type(screen.getByPlaceholderText("Email"), "test@example.com");
-    await userEvent.type(screen.getByPlaceholderText("Password"), "password123");
+    await userEvent.type(screen.getByLabelText("Email"), "test@example.com");
+    await userEvent.type(screen.getByLabelText("Password"), "password123");
     await userEvent.click(screen.getByRole("button", { name: "Sign up" }));
 
     await waitFor(() => {
@@ -49,8 +49,8 @@ describe("SignupPage", () => {
     mockSignup.mockRejectedValue(axiosError);
     renderPage();
 
-    await userEvent.type(screen.getByPlaceholderText("Email"), "test@example.com");
-    await userEvent.type(screen.getByPlaceholderText("Password"), "password123");
+    await userEvent.type(screen.getByLabelText("Email"), "test@example.com");
+    await userEvent.type(screen.getByLabelText("Password"), "password123");
     await userEvent.click(screen.getByRole("button", { name: "Sign up" }));
 
     expect(await screen.findByText("Email already registered")).toBeInTheDocument();

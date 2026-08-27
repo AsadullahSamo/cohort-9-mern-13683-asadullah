@@ -82,7 +82,8 @@ describe("DashboardPage", () => {
     });
     renderPage();
 
-    expect(screen.getByText("No notes yet. Create your first note.")).toBeInTheDocument();
+    expect(screen.getByText("A blank page")).toBeInTheDocument();
+    expect(screen.getByText("Create your first note to get started.")).toBeInTheDocument();
   });
 
   it("renders notes with formatted HTML content preserved", () => {
@@ -114,7 +115,7 @@ describe("DashboardPage", () => {
     renderPage();
 
     await userEvent.click(
-      screen.getAllByRole("button", { name: "Delete" })[0]
+      screen.getByRole("button", { name: "Delete note" })
     );
 
     expect(mockMutate).not.toHaveBeenCalled();
@@ -146,7 +147,7 @@ describe("DashboardPage", () => {
     });
     renderPage();
 
-    await userEvent.click(screen.getByText("Delete"));
+    await userEvent.click(screen.getByRole("button", { name: "Delete note" }));
     await userEvent.click(screen.getByRole("button", { name: "Cancel" }));
 
     expect(mockMutate).not.toHaveBeenCalled();

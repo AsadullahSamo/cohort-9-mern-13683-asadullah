@@ -55,7 +55,7 @@ describe("NoteEditorPage", () => {
     });
     renderAtPath("/notes/new");
 
-    expect(screen.getByPlaceholderText("Title")).toHaveValue("");
+    expect(screen.getByPlaceholderText("Untitled")).toHaveValue("");
     expect(screen.getByTestId("mock-editor")).toHaveValue("");
   });
 
@@ -67,7 +67,7 @@ describe("NoteEditorPage", () => {
     });
     renderAtPath("/notes/new");
 
-    await userEvent.type(screen.getByPlaceholderText("Title"), "New title");
+    await userEvent.type(screen.getByPlaceholderText("Untitled"), "New title");
     await userEvent.type(screen.getByTestId("mock-editor"), "New content");
     await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
@@ -87,7 +87,7 @@ describe("NoteEditorPage", () => {
     });
     renderAtPath("/notes/1");
 
-    expect(screen.getByPlaceholderText("Title")).toHaveValue("Existing");
+    expect(screen.getByPlaceholderText("Untitled")).toHaveValue("Existing");
     expect(screen.getByTestId("mock-editor")).toHaveValue("Existing content");
   });
 
@@ -99,8 +99,8 @@ describe("NoteEditorPage", () => {
     });
     renderAtPath("/notes/1");
 
-    await userEvent.clear(screen.getByPlaceholderText("Title"));
-    await userEvent.type(screen.getByPlaceholderText("Title"), "Updated title");
+    await userEvent.clear(screen.getByPlaceholderText("Untitled"));
+    await userEvent.type(screen.getByPlaceholderText("Untitled"), "Updated title");
     await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
     await waitFor(() => {

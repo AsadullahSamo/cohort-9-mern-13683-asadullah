@@ -14,7 +14,7 @@ const SALT_ROUNDS = 12;
 async function signup(req, res) {
   const { email, password } = req.body;
 
-  if (!email || !password) {
+  if (typeof email !== "string" || typeof password !== "string" || !email || !password) {
     return res.status(400).json({ error: "Email and password are required" });
   }
 
@@ -37,7 +37,7 @@ async function signup(req, res) {
 async function login(req, res) {
   const { email, password } = req.body;
 
-  if (!email || !password) {
+  if (typeof email !== "string" || typeof password !== "string" || !email || !password) {
     return res.status(400).json({ error: "Email and password are required" });
   }
 
