@@ -32,8 +32,8 @@ describe("LoginPage", () => {
     mockLogin.mockResolvedValue(undefined);
     renderPage();
 
-    await userEvent.type(screen.getByPlaceholderText("Email"), "test@example.com");
-    await userEvent.type(screen.getByPlaceholderText("Password"), "password123");
+    await userEvent.type(screen.getByLabelText("Email"), "test@example.com");
+    await userEvent.type(screen.getByLabelText("Password"), "password123");
     await userEvent.click(screen.getByRole("button", { name: "Log in" }));
 
     await waitFor(() => {
@@ -49,8 +49,8 @@ describe("LoginPage", () => {
     mockLogin.mockRejectedValue(axiosError);
     renderPage();
 
-    await userEvent.type(screen.getByPlaceholderText("Email"), "test@example.com");
-    await userEvent.type(screen.getByPlaceholderText("Password"), "wrongpass");
+    await userEvent.type(screen.getByLabelText("Email"), "test@example.com");
+    await userEvent.type(screen.getByLabelText("Password"), "wrongpass");
     await userEvent.click(screen.getByRole("button", { name: "Log in" }));
 
     expect(await screen.findByText("Invalid credentials")).toBeInTheDocument();

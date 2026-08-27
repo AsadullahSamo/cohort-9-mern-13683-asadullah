@@ -114,7 +114,7 @@ describe("DashboardPage", () => {
     renderPage();
 
     await userEvent.click(
-      screen.getAllByRole("button", { name: "Delete" })[0]
+      screen.getByRole("button", { name: "Delete note" })
     );
 
     expect(mockMutate).not.toHaveBeenCalled();
@@ -146,7 +146,7 @@ describe("DashboardPage", () => {
     });
     renderPage();
 
-    await userEvent.click(screen.getByText("Delete"));
+    await userEvent.click(screen.getByRole("button", { name: "Delete note" }));
     await userEvent.click(screen.getByRole("button", { name: "Cancel" }));
 
     expect(mockMutate).not.toHaveBeenCalled();
