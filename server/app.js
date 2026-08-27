@@ -12,6 +12,7 @@ const authRoutes = require("./routes/auth");
 const notesRoutes = require("./routes/notes");
 
 const app = express();
+app.disable("x-powered-by");
 
 app.use(
   cors({
