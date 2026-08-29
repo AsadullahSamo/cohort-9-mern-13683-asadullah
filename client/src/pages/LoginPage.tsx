@@ -13,7 +13,7 @@ export function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit( e: React.FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
     setError("");
     setEmailError("");
