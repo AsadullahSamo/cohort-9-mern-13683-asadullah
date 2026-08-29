@@ -27,13 +27,13 @@ jobs:
       - name: Install and test backend
         working-directory: server
         run: |
-          npm install
+          npm ci --ignore-scripts
           npm run test:coverage
 
       - name: Install and test frontend
         working-directory: client
         run: |
-          npm install
+          npm ci --ignore-scripts
           npm run test:coverage
 
       - name: SonarCloud Scan
