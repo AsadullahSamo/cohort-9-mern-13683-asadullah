@@ -50,13 +50,12 @@ async function login(req, res) {
     return res.status(400).json({ error: "Email and password are required" });
   }
 
-  const user = await User.findOne({ email: String(email) }).select("+password");
-  if (!user) {
-    return res.status(401).json({ error: "Invalid credentials" });
+  if (!isValidEmail(email)) {
+    return res.status(400).json({ error: "Enter a valid email address" });
   }
 
-  const valid = await user.comparePassword(password);
-  if (!valid) {
+  const user = await User.findOne({ email: String(email) }).select("+password");
+  if (!user) {
     return res.status(401).json({ error: "Invalid credentials" });
   }
 

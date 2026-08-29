@@ -5,8 +5,11 @@ export function isValidEmail(email: string): boolean {
   if (atIndex <= 0 || atIndex !== email.lastIndexOf("@")) return false;
 
   const domain = email.slice(atIndex + 1);
-  const dotIndex = domain.lastIndexOf(".");
-  if (dotIndex <= 0 || dotIndex === domain.length - 1) return false;
+  const labels = domain.split(".");
+
+  if (labels.length < 2 || labels.some((label) => !label)) {
+    return false;
+  }
 
   return true;
 }

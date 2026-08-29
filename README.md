@@ -90,7 +90,7 @@ Create a `.env` file in `server/` with the following variables:
 
 ```
 PORT=5000
-MONGO_URI=your-mongodb-connection-string
+MONGODB_URI=your-mongodb-connection-string
 JWT_ACCESS_SECRET=your-access-token-secret
 JWT_REFRESH_SECRET=your-refresh-token-secret
 CLIENT_URL=http://localhost:5173
