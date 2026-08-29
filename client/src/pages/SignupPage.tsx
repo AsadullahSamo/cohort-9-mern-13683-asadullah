@@ -7,12 +7,30 @@ export function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const { signup } = useAuth();
   const navigate = useNavigate();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+    setEmailError("");
+    setPasswordError("");
+
+    const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!validEmail) {
+      setEmailError("Enter a valid email address");
+    }
+
+    if (!password) {
+      setPasswordError("Password is required");
+    } else if (password.length < 8) {
+      setPasswordError("Password must be at least 8 characters");
+    }
+    if (!validEmail || password.length < 8) return;
+
+ 
     try {
       await signup(email, password);
       navigate("/");
@@ -140,8 +158,8 @@ export function SignupPage() {
               style={{ border: "1px solid #E4E4EE", boxShadow: "none" }}
               onFocus={(e) => (e.currentTarget.style.boxShadow = "0 0 0 2px #E2A83D")}
               onBlur={(e) => (e.currentTarget.style.boxShadow = "none")}
-              required
             />
+            {emailError && <p role="alert" className="text-xs text-red-600">{emailError}</p>}
           </div>
 
           <div className="space-y-1.5 mb-6">
@@ -158,8 +176,8 @@ export function SignupPage() {
               style={{ border: "1px solid #E4E4EE" }}
               onFocus={(e) => (e.currentTarget.style.boxShadow = "0 0 0 2px #E2A83D")}
               onBlur={(e) => (e.currentTarget.style.boxShadow = "none")}
-              required
             />
+            {passwordError && <p role="alert" className="text-xs text-red-600">{passwordError}</p>}
           </div>
 
           <button
