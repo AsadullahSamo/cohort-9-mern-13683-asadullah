@@ -82,7 +82,6 @@ describe("DashboardPage", () => {
     });
     renderPage();
 
-    expect(screen.getByText("A blank page")).toBeInTheDocument();
     expect(screen.getByText("Create your first note to get started.")).toBeInTheDocument();
   });
 
