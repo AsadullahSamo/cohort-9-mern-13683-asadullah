@@ -24,17 +24,11 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install backend dependencies
+      - name: Install and test backend
         working-directory: server
-        run: npm ci
-
-      - name: Download MongoDB test binary
-        working-directory: server
-        run: npx mongodb-memory-server download
-
-      - name: Test backend
-        working-directory: server
-        run: npm run test:coverage
+        run: |
+          npm ci --ignore-scripts
+          npm run test:coverage
 
       - name: Install and test frontend
         working-directory: client
