@@ -26,7 +26,7 @@ jobs:
 
       - name: Install backend dependencies
         working-directory: server
-        run: npm ci --ignore-scripts
+        run: npm ci
 
       - name: Download MongoDB test binary
         working-directory: server
