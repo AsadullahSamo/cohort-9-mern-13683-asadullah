@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const { isValidEmail } = require("../utils/validateEmail");
 const { signAccessToken, signRefreshToken } = require("../utils/tokens");
 
 const REFRESH_COOKIE_OPTIONS = {
@@ -18,7 +19,7 @@ async function signup(req, res) {
     return res.status(400).json({ error: "Email and password are required" });
   }
 
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (!isValidEmail(email)) {
     return res.status(400).json({ error: "Enter a valid email address" });
   }
 

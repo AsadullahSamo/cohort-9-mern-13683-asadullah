@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { isValidEmail } from "../utils/validateEmail";
 import axios from "axios";
 
 export function SignupPage() {
@@ -18,7 +19,7 @@ export function SignupPage() {
     setEmailError("");
     setPasswordError("");
 
-    const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const validEmail = isValidEmail(email);
     if (!validEmail) {
       setEmailError("Enter a valid email address");
     }
