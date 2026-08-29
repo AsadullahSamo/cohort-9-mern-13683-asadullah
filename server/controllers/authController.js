@@ -59,6 +59,11 @@ async function login(req, res) {
     return res.status(401).json({ error: "Invalid credentials" });
   }
 
+  const valid = await user.comparePassword(password);
+  if (!valid) {
+    return res.status(401).json({ error: "Invalid credentials" });
+  }
+
   const accessToken = signAccessToken(user._id.toString());
   const refreshToken = signRefreshToken(user._id.toString());
   user.refreshToken = await bcrypt.hash(refreshToken, SALT_ROUNDS);
