@@ -135,12 +135,6 @@ export function DashboardPage() {
       <div className="max-w-3xl mx-auto px-6 py-10">
         <div className="flex justify-between items-start mb-8">
           <div>
-            <span
-              className="text-xs tracking-[0.2em] uppercase"
-              style={{ color: "#6B6F86" }}
-            >
-              Notes
-            </span>
             <h1
               className="text-3xl mt-1"
               style={{ fontFamily: "'Fraunces', serif", fontWeight: 500, color: "#1B1F3B" }}
@@ -299,7 +293,7 @@ export function DashboardPage() {
               className="text-xl"
               style={{ fontFamily: "'Fraunces', serif", fontWeight: 500, color: "#1B1F3B" }}
             >
-              {debouncedSearch ? "No notes match your search" : "A blank page"}
+              {debouncedSearch ? "No notes match your search" : ""}
             </p>
             <p className="text-sm mt-1" style={{ color: "#6B6F86" }}>
               {debouncedSearch ? "Try a different search term." : "Create your first note to get started."}

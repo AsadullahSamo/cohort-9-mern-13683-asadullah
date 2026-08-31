@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const { isValidEmail } = require("../utils/validateEmail");
 const { signAccessToken, signRefreshToken } = require("../utils/tokens");
 
 const REFRESH_COOKIE_OPTIONS = {
@@ -18,7 +19,15 @@ async function signup(req, res) {
     return res.status(400).json({ error: "Email and password are required" });
   }
 
-  const existing = await User.findOne({ email });
+  if (!isValidEmail(email)) {
+    return res.status(400).json({ error: "Enter a valid email address" });
+  }
+
+  if (password.length < 8) {
+    return res.status(400).json({ error: "Password must be at least 8 characters" });
+  }
+
+  const existing = await User.findOne({ email: String(email) });
   if (existing) {
     return res.status(409).json({ error: "Email already registered" });
   }
@@ -41,7 +50,11 @@ async function login(req, res) {
     return res.status(400).json({ error: "Email and password are required" });
   }
 
-  const user = await User.findOne({ email }).select("+password");
+  if (!isValidEmail(email)) {
+    return res.status(400).json({ error: "Enter a valid email address" });
+  }
+
+  const user = await User.findOne({ email: String(email) }).select("+password");
   if (!user) {
     return res.status(401).json({ error: "Invalid credentials" });
   }
